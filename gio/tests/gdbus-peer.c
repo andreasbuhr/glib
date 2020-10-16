@@ -414,6 +414,7 @@ run_service_loop (GMainContext *service_context)
 
   loop = g_main_loop_new (service_context, FALSE);
   source = g_idle_source_new ();
+  g_source_set_name(source, "[gio/tests] idle_in_service_loop");
   g_source_set_callback (source, idle_in_service_loop, loop, NULL);
   g_source_attach (source, service_context);
   g_source_unref (source);

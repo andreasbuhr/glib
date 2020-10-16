@@ -102,6 +102,7 @@
 #include "gmain-internal.h"
 #include "glib-init.h"
 #include "glib-private.h"
+#include <stdio.h>
 
 /**
  * SECTION:main
@@ -1277,6 +1278,9 @@ g_source_attach (GSource      *source,
 		 GMainContext *context)
 {
   guint result = 0;
+  if(source->name == NULL){
+    printf("we found an OFFENDER\n");
+  }
 
   g_return_val_if_fail (source != NULL, 0);
   g_return_val_if_fail (g_atomic_int_get (&source->ref_count) > 0, 0);
@@ -3700,6 +3704,9 @@ g_main_context_prepare (GMainContext *context,
       if (source->flags & G_SOURCE_READY)
 	{
 	  n_ready++;
+          printf("found ready source %s with priority %i\n",
+                  (g_source_get_name (source) != NULL) ? g_source_get_name (source) : "(unnamed)",
+                  source->priority);
 	  current_priority = source->priority;
 	  context->timeout = 0;
 	}
@@ -4069,7 +4076,8 @@ g_main_context_iterate (GMainContext *context,
   
   UNLOCK_CONTEXT (context);
 
-  g_main_context_prepare (context, &max_priority); 
+  g_main_context_prepare (context, &max_priority);
+  printf("max_priority is %i\n", max_priority);
   
   while ((nfds = g_main_context_query (context, max_priority, &timeout, fds, 
 				       allocated_nfds)) > allocated_nfds)
@@ -4877,6 +4885,8 @@ g_timeout_source_new (guint interval)
   GSource *source = g_source_new (&g_timeout_funcs, sizeof (GTimeoutSource));
   GTimeoutSource *timeout_source = (GTimeoutSource *)source;
 
+  /* set a name in case the caller doesn't */
+  g_source_set_name(source, "Timeoutsource");
   timeout_source->interval = interval;
   g_timeout_set_expiration (timeout_source, g_get_monotonic_time ());
 
@@ -4968,6 +4978,7 @@ g_timeout_add_full (gint           priority,
   g_return_val_if_fail (function != NULL, 0);
 
   source = g_timeout_source_new (interval);
+  g_source_set_name(source, "[glib] g_timeout_add_full");
 
   if (priority != G_PRIORITY_DEFAULT)
     g_source_set_priority (source, priority);

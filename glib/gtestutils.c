@@ -3248,6 +3248,7 @@ wait_for_child (GPid pid,
   if (timeout)
     {
       source = g_timeout_source_new (0);
+      g_source_set_name(source, "[glib] wait_for_child");
       g_source_set_ready_time (source, g_get_monotonic_time () + timeout);
       g_source_set_callback (source, (GSourceFunc) child_timeout, &data, NULL);
       g_source_attach (source, context);

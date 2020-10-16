@@ -1896,6 +1896,7 @@ g_socket_client_enumerator_callback (GObject      *object,
   attempt->cancellable = g_cancellable_new ();
   attempt->connection = (GIOStream *)g_socket_connection_factory_create_connection (socket);
   attempt->timeout_source = g_timeout_source_new (HAPPY_EYEBALLS_CONNECTION_ATTEMPT_TIMEOUT_MS);
+  g_source_set_name(attempt->timeout_source, "[gio] g_socket_client_enumerator_callback");
 
   if (G_IS_PROXY_ADDRESS (address) && data->client->priv->enable_proxy)
     attempt->proxy_addr = g_object_ref (G_PROXY_ADDRESS (address));

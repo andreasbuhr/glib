@@ -155,6 +155,7 @@ g_network_monitor_netlink_initable_init (GInitable     *initable,
   nl->priv->source = g_socket_create_source (nl->priv->sock, G_IO_IN, NULL);
   g_source_set_callback (nl->priv->source,
                          (GSourceFunc) read_netlink_messages_callback, nl, NULL);
+  g_source_set_name(nl->priv->source, "[gio] g_network_monitor_netlink_initable_init");
   g_source_attach (nl->priv->source, nl->priv->context);
 
   return initable_parent_iface->init (initable, cancellable, error);
@@ -217,6 +218,7 @@ queue_request_dump (GNetworkMonitorNetlink *nl)
   nl->priv->dump_source = g_timeout_source_new_seconds (1);
   g_source_set_callback (nl->priv->dump_source,
                          (GSourceFunc) timeout_request_dump, nl, NULL);
+  g_source_set_name (nl->priv->dump_source, "nl->priv->context");
   g_source_attach (nl->priv->dump_source, nl->priv->context);
 }
 

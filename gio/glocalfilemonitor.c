@@ -797,6 +797,7 @@ g_local_file_monitor_start (GLocalFileMonitor *local_monitor,
 #endif
     }
 
+  g_source_set_name((GSource *) source, "[gio] g_local_file_monitor_start");
   g_source_attach ((GSource *) source, context);
 
   G_LOCAL_FILE_MONITOR_GET_CLASS (local_monitor)->start (local_monitor,

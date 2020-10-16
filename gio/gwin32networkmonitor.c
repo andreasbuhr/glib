@@ -249,6 +249,7 @@ win_network_monitor_route_changed_cb (PVOID                 context,
   route_data->win = win;
 
   win->priv->route_change_source = g_idle_source_new ();
+  g_source_set_name (win->priv->route_change_source, "[gio] win_network_monitor_route_changed_cb");
   g_source_set_priority (win->priv->route_change_source, G_PRIORITY_DEFAULT);
   g_source_set_callback (win->priv->route_change_source,
                          win_network_monitor_invoke_route_changed,

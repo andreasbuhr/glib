@@ -845,6 +845,7 @@ g_memory_output_stream_create_source (GPollableOutputStream *stream,
   GSource *base_source, *pollable_source;
 
   base_source = g_timeout_source_new (0);
+  g_source_set_name(base_source, "[gio] g_memory_output_stream_create_source");
   pollable_source = g_pollable_source_new_full (stream, base_source, cancellable);
   g_source_unref (base_source);
 

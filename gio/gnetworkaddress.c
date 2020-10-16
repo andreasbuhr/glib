@@ -1049,6 +1049,7 @@ got_ipv4_addresses (GObject      *source_object,
       g_source_set_callback (addr_enum->wait_source,
                              on_address_timeout,
                              addr_enum, NULL);
+      g_source_set_name(addr_enum->wait_source, "[gio] got_ipv4_addresses");
       g_source_attach (addr_enum->wait_source, addr_enum->context);
     }
 

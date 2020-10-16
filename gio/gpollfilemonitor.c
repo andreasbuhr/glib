@@ -161,6 +161,7 @@ schedule_poll_timeout (GPollFileMonitor* poll_monitor)
 {
   poll_monitor->timeout = g_timeout_source_new_seconds (POLL_TIME_SECS);
   g_source_set_callback (poll_monitor->timeout, poll_file_timeout, poll_monitor, NULL);
+  g_source_set_name (poll_monitor->timeout, "[gio] schedule_poll_timeout");
   g_source_attach (poll_monitor->timeout, g_main_context_get_thread_default ());
 }
 

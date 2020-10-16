@@ -320,6 +320,7 @@ eject_unmount_do (GMount              *mount,
   g_signal_emit_by_name (mount, "pre-unmount", 0);
 
   timeout = g_timeout_source_new (500);
+  g_source_set_name(timeout, "[gio] eject_unmount_do");
   g_task_attach_source (task, timeout, (GSourceFunc) eject_unmount_do_cb);
   g_source_unref (timeout);
 }
